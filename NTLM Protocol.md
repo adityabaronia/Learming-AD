@@ -54,12 +54,10 @@ SAM can be fonud at:
 ```
 Computer\HKEY_LOCAL_MACHINE\SAM\SAM\Domains\Account\Users
 ```
-A copy id also on diskin C:\Windwos\System32\SAM
-
-So it contains the list of local users and their passwords, as well as the lsit of the local groups. well, to be more precise, it contains an ecrypted version of the hashes. But as all the information needed to decrypt them is also in registry (SAM and SYSTEM).
+<span style="color: green">A copy id also on disk in **C:\Windows\System32\SAM** So it contains the list of local users and their passwords, as well as the lsit of the local groups. well, to be more precise, it contains an ecrypted version of the hashes. But as all the information needed to decrypt them is also in registry (SAM and SYSTEM).</span>
 
 
-To see how decryption mechanism for NT hash work, give a look into secretsdump.py[3] code or Mimikatz code[4]. 
+To see how decryption mechanism for NT hash work, give a <span style="color: green">look into secretsdump.py[3] code or Mimikatz code[4]. </span>
 SAM and SYSTEM databases can be backed up to extract the user's hashed passwords database.
 First we save the two databases in a file
 ```bash
@@ -73,7 +71,7 @@ secretsdump.py -sam sam.save -system system.save LOCAL
 
 ### Summary of verification process of Local Account
 
-Since the server sends a challenge and the client encrypts this challenge with the hash of its secret and then sends it back to the server with its username , the server will look for the hash of the user's passwrod in its SAM database. Once it has it, it will also encrypt the challenge previously sent with this hash, and copmare its result with the one returned by the user. If it is the same then the user is authenticated! Otherwise, the iser has not provided the correct secret.
+<span style="color: red">Since the server sends a challenge and the client encrypts this challenge with the hash of its secret and then sends it back to the server with its username , the server will look for the hash of the user's passwrod in its SAM database. Once it has it, it will also encrypt the challenge previously sent with this hash, and copmare its result with the one returned by the user. If it is the same then the user is authenticated! Otherwise, the iser has not provided the correct secret.</span>
 
 ## Domain account
 When an authentication is done with a domain account, the user's NT hash is no longer stored on the server, but on the domain controller. The server to which user wants to authenticate receives the answer to its challenge, but it is not able to check if this answer is valid. It will delegate this task to the domain controller.
@@ -90,14 +88,14 @@ The domain controller will look for the user's NT hash in its database. For the 
 A message will then be sent to the server (NETLOGON_VALIDATION_SAM_INFO4) indicating wheather or not the client is authenticated, and it will also send a bunch of information about the user. This is the same information that is found in the PAC(PAC is in a way an extension of the Kerberos protocol used by Microsoft for the proper management of rights in an Active Directory) when kerberos authentication is used.
 
 ### Summary of verification process of Domain controller
-The server sends the challenge to the client and the client encrypts this challenge with the hash of its secret and send it back to the sever along with its username and the domain name. This time the server will send this information to the domain controller in a secure Channel using Netlogon service. Once in possession of this information, the domain controller will also encrypt the challenge using the user;s hash, found in its NTDS.DIT database, and will then be able to compare its result with the one returned by the user. If it is same then the user is authenticated. Otherwise, the user has not provided the right secret. in both the cases, the domain controller transmits the information to the server.
+<span style="color: red">The server sends the challenge to the client and the client encrypts this challenge with the hash of its secret and send it back to the sever along with its username and the domain name. This time the server will send this information to the domain controller in a secure Channel using Netlogon service. Once in possession of this information, the domain controller will also encrypt the challenge using the user;s hash, found in its NTDS.DIT database, and will then be able to compare its result with the one returned by the user. If it is same then the user is authenticated. Otherwise, the user has not provided the right secret. in both the cases, the domain controller transmits the information to the server.</span>
 
 ## NT hash limitations
 From here we have understood that the plain text password is never used in exchanges, but the hashed version of the password called NT hash. It's simple hash of the plain text password.
 
 If we think about it, stealing the plaintext password or stealing the hash is exactly the same. Since it is the hash that is used to respond to the challenge/Response, being in possession of the hash allows one to authenticate to a server. Having the password in clear text not useful at all.
 
-We can say that having the NT hash is same as havign the password in clear text, in majority of the cases.
+<span style="color: green">We can say that having the NT hash is same as havign the password in clear text, in majority of the cases.</span>
 
 
 
