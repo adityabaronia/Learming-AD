@@ -100,3 +100,4 @@ CIFS service receives the TGS and can decrypt it with its own secret. Since only
 
 ## Reference
 1. https://en.hackndo.com/kerberos/
+2. https://en.hackndo.com/kerberoasting/
